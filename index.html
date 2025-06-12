@@ -871,10 +871,10 @@
             }, 500);
         }
         
-   function saveEvaluation() {
+function saveEvaluation() {
     const canvas = document.getElementById('signatureCanvas');
     const signatureData = canvas.toDataURL();
-    
+
     const evaluation = {
         id: document.getElementById('evaluationId').value || Date.now(),
         ipgCampus: document.getElementById('ipgCampus').value,
@@ -904,7 +904,7 @@
         evaluationDate: document.getElementById('evaluationDate').value,
         signatureData: signatureData
     };
-    
+
     // Save to local storage
     const index = evaluations.findIndex(e => e.id == evaluation.id);
     if (index >= 0) {
@@ -913,14 +913,14 @@
         evaluations.push(evaluation);
     }
     saveEvaluationsToStorage();
-    
+
     // Send to Google Sheet
-    fetch('https://script.google.com/macros/s/AKfycbw1vAz1HSFwn41m__J_dDcS7dNKrPBRC_9XB1_1iJQ3rRgTf4D1UP0JKthyFHrtuJEK/exec', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(evaluation)
+fetch('https://script.google.com/macros/s/AKfycbydMGYnOxJFaysg0DdcbDNYphlRIzn4ZZh32aaaJjE9MfKCM-g4nukr7OlQ8FIjI2Wu/exec', {
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(evaluation)
     })
     .then(response => response.json())
     .then(data => {
@@ -932,20 +932,10 @@
     })
     .catch(error => {
         console.error('Error:', error);
-        alert('Error saving to Google Sheet: ' + error.message);
+        alert('❌ Error saving to Google Sheet: ' + error.message);
     });
 }
-        // 切换回仪表板
-        document.getElementById('dashboardScreen').classList.remove('hidden');
-        document.getElementById('evaluationFormScreen').classList.add('hidden');
-        loadEvaluations();
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        alert('Error saving to Google Sheet: ' + error.message);
-    });
-}
-
+        
         function updateMarkAndComments(section, maxMark) {
     const tahap = document.getElementById(`${section}Tahap`).value;
     const mark = calculateMark(tahap, maxMark);
@@ -1098,7 +1088,6 @@ function doPost(e) {
   return ContentService.createTextOutput(JSON.stringify({ "result": "success" }))
     .setMimeType(ContentService.MimeType.JSON);
 }
-
     </script>
 </body>
 </html>
