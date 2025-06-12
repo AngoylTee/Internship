@@ -871,7 +871,7 @@
             }, 500);
         }
         
-      function saveEvaluation() {
+   function saveEvaluation() {
     const canvas = document.getElementById('signatureCanvas');
     const signatureData = canvas.toDataURL();
     
@@ -905,7 +905,7 @@
         signatureData: signatureData
     };
     
-    // 保存到本地存储
+    // Save to local storage
     const index = evaluations.findIndex(e => e.id == evaluation.id);
     if (index >= 0) {
         evaluations[index] = evaluation;
@@ -914,23 +914,27 @@
     }
     saveEvaluationsToStorage();
     
-    // 发送到Google Sheet
-  fetch('https://script.google.com/macros/s/AKfycbyf9fVUHq3j_srUFEcrKVv_SNvL6XRszTicAzJWqOo/dev', {
-  method: 'POST',
-  headers: {
-    'Content-Type': 'application/json'
-  },
-  body: JSON.stringify(evaluation)
-})
-.then(response => response.json())
-.then(data => {
-  alert("✅ Data saved to Google Sheet!");
-})
-.catch(error => {
-  alert("❌ Error saving to Google Sheet: " + error.message);
-});
-
-        
+    // Send to Google Sheet
+    fetch('https://script.google.com/macros/s/AKfycbw1vAz1HSFwn41m__J_dDcS7dNKrPBRC_9XB1_1iJQ3rRgTf4D1UP0JKthyFHrtuJEK/exec', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(evaluation)
+    })
+    .then(response => response.json())
+    .then(data => {
+        alert("✅ Data saved to Google Sheet!");
+        // Switch back to dashboard
+        document.getElementById('dashboardScreen').classList.remove('hidden');
+        document.getElementById('evaluationFormScreen').classList.add('hidden');
+        loadEvaluations();
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Error saving to Google Sheet: ' + error.message);
+    });
+}
         // 切换回仪表板
         document.getElementById('dashboardScreen').classList.remove('hidden');
         document.getElementById('evaluationFormScreen').classList.add('hidden');
